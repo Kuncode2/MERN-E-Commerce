@@ -6,7 +6,7 @@ import Item from '../Item/Items'
 const NewCollections = () => {
   const [new_collection,setNew_collection] = useState([])
   useEffect(()=>{
-    fetch('http://localhost:4000/newcollections')
+    fetch(`${backendURL}newcollections`)
     .then((response)=>response.json())
     .then((data)=>setNew_collection(data))
   },[])

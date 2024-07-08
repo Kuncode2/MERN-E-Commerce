@@ -1,4 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
+import { backendURL } from "../config";
+
 export const ShopContext = createContext(null);
 
 const getDefaultCart = () => {
@@ -14,12 +16,12 @@ const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState(getDefaultCart);
 
   useEffect(() => {
-    fetch('https://mern-e-commerce-backend-526x.onrender.com/allproducts')
+    fetch(`${backendURL}/allproducts`)
       .then((response) => response.json())
-      .then((data) => setAll_product(data))
+      .then((data) => setAll_product(data));
 
     if (localStorage.getItem('auth-token')) {
-      fetch('https://mern-e-commerce-backend-526x.onrender.com/getcart', {
+      fetch(`${backendURL}/getcart`, {
         method: 'POST',
         headers: {
           Accept: 'application/form-data',
@@ -29,14 +31,14 @@ const ShopContextProvider = (props) => {
         body: "",
       })
         .then((response) => response.json())
-        .then((data) => setCartItems(data))
+        .then((data) => setCartItems(data));
     }
-  }, [])
+  }, []);
 
   const addToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
     if (localStorage.getItem('auth-token')) {
-      fetch('https://mern-e-commerce-backend-526x.onrender.com/addtocart', {
+      fetch(`${backendURL}/addtocart`, {
         method: 'POST',
         headers: {
           Accept: 'application/form-data',
@@ -46,14 +48,14 @@ const ShopContextProvider = (props) => {
         body: JSON.stringify({ "itemId": itemId }),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data))
+        .then((data) => console.log(data));
     }
   };
 
   const removeToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     if (localStorage.getItem('auth-token')) {
-      fetch('https://mern-e-commerce-backend-526x.onrender.com/removefromcart', {
+      fetch(`${backendURL}/removefromcart`, {
         method: 'POST',
         headers: {
           Accept: 'application/form-data',
@@ -63,7 +65,7 @@ const ShopContextProvider = (props) => {
         body: JSON.stringify({ "itemId": itemId }),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data))
+        .then((data) => console.log(data));
     }
   };
 
@@ -88,7 +90,7 @@ const ShopContextProvider = (props) => {
       }
     }
     return totalItem;
-  }
+  };
 
   const contextValue = { geTotoalcartItem, getTotalCartAmount, all_product, cartItems, addToCart, removeToCart };
 
