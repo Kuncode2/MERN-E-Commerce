@@ -10,59 +10,60 @@ const getDefaultCart = () => {
 };
 
 const ShopContextProvider = (props) => {
-  const [all_product,setAll_product] = useState([]);
+  const [all_product, setAll_product] = useState([]);
   const [cartItems, setCartItems] = useState(getDefaultCart);
 
-  useEffect(()=>{
-      fetch('http://localhost:4000/allproducts')
-      .then((response)=>response.json())
-      .then((data)=>setAll_product(data))
+  useEffect(() => {
+    fetch('https://mern-e-commerce-backend-526x.onrender.com/allproducts')
+      .then((response) => response.json())
+      .then((data) => setAll_product(data))
 
-      if(localStorage.getItem('auth-token')){
-        fetch('http://localhost:4000/getcart',{
-          method:'POST',
-          headers:{
-            Accept:'application/form-data',
-            'auth-token' : `${localStorage.getItem('auth-token')}`,
-            'Content-Type': 'application/json',
-          },
-          body:"",
-        }).then((response)=>response.json())
-        .then((data)=>setCartItems(data))
-      }
-  },[])
+    if (localStorage.getItem('auth-token')) {
+      fetch('https://mern-e-commerce-backend-526x.onrender.com/getcart', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/form-data',
+          'auth-token': `${localStorage.getItem('auth-token')}`,
+          'Content-Type': 'application/json',
+        },
+        body: "",
+      })
+        .then((response) => response.json())
+        .then((data) => setCartItems(data))
+    }
+  }, [])
 
   const addToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
-    if(localStorage.getItem('auth-token')){
-      fetch('http://localhost:4000/addtocart',{
-        method:'POST',
-        headers:{
-          Accept:'application/form-data',
-          'auth-token':`${localStorage.getItem('auth-token')}`,
-          'Content-Type':'application/json',
+    if (localStorage.getItem('auth-token')) {
+      fetch('https://mern-e-commerce-backend-526x.onrender.com/addtocart', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/form-data',
+          'auth-token': `${localStorage.getItem('auth-token')}`,
+          'Content-Type': 'application/json',
         },
-        body:JSON.stringify({"itemId":itemId}),
+        body: JSON.stringify({ "itemId": itemId }),
       })
-      .then((response)=>response.json())
-      .then((data)=>console.log(data))
+        .then((response) => response.json())
+        .then((data) => console.log(data))
     }
   };
 
   const removeToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
-    if(localStorage.getItem('auth-token')){
-      fetch('http://localhost:4000/removefromcart',{
-        method:'POST',
-        headers:{
-          Accept:'application/form-data',
-          'auth-token':`${localStorage.getItem('auth-token')}`,
-          'Content-Type':'application/json',
+    if (localStorage.getItem('auth-token')) {
+      fetch('https://mern-e-commerce-backend-526x.onrender.com/removefromcart', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/form-data',
+          'auth-token': `${localStorage.getItem('auth-token')}`,
+          'Content-Type': 'application/json',
         },
-        body:JSON.stringify({"itemId":itemId}),
+        body: JSON.stringify({ "itemId": itemId }),
       })
-      .then((response)=>response.json())
-      .then((data)=>console.log(data))
+        .then((response) => response.json())
+        .then((data) => console.log(data))
     }
   };
 
@@ -79,20 +80,17 @@ const ShopContextProvider = (props) => {
     return totalAmount;
   };
 
-  const geTotoalcartItem = ()=>{
-    let totalItem = 0
-    for(const item in cartItems)
-      {
-        if(cartItems[item]>0)
-          {
-            totalItem+= cartItems[item]
-          }
+  const geTotoalcartItem = () => {
+    let totalItem = 0;
+    for (const item in cartItems) {
+      if (cartItems[item] > 0) {
+        totalItem += cartItems[item];
       }
-      return totalItem
+    }
+    return totalItem;
   }
-   
 
-  const contextValue = { geTotoalcartItem,getTotalCartAmount, all_product, cartItems, addToCart, removeToCart };
+  const contextValue = { geTotoalcartItem, getTotalCartAmount, all_product, cartItems, addToCart, removeToCart };
 
   return (
     <ShopContext.Provider value={contextValue}>
