@@ -1,7 +1,7 @@
 import React from 'react'
 import "./Admin.css"
 import {Routes,Route} from 'react-router-dom'
-import AddProduct from '../../Components/AddProduct/AddProduct'
+import AddProduct from '../../Components/AdddProduct/AddProduct'
 import ListProduct from '../../Components/ListProduct/ListProduct'
 import Sidebar from '../../Components/Sidebar/Sidebar'
 const Admin = () => {
